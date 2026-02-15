@@ -1,18 +1,14 @@
 # Dependencies
 node_modules/
-*/node_modules/
 
 # Build outputs
 dist/
-dist-ssr/
 build/
 
 # Environment files
 .env
 .env.local
 .env.*.local
-frontend/.env
-backend/.env
 
 # Logs
 logs/
@@ -41,6 +37,11 @@ Thumbs.db
 # Database
 *.sqlite
 *.sqlite3
+*.db
+
+# File uploads (if applicable)
+uploads/
+public/uploads/
 
 # Temporary files
 *.tmp
@@ -48,9 +49,10 @@ Thumbs.db
 temp/
 tmp/
 
-# Excel backups (if generated)
+# Excel backups and lock files
 *.xlsx.backup
 *~$*.xlsx
+*.xlsx.lock
 
 # Misc
 .cache/
