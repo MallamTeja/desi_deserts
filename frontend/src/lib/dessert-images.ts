@@ -1,11 +1,11 @@
-import gulabJamun from "@/assets/gulab-jamun.jpg";
-import rasmalai from "@/assets/rasmalai.jpg";
-import jalebi from "@/assets/jalebi.jpg";
+import basundi from "@/assets/gulab-jamun.jpg";
+import kaddukheer from "@/assets/rasmalai.jpg";
+import doubleKameta from "@/assets/jalebi.jpg";
 
 export const dessertImages: Record<string, string> = {
-  "gulab-jamun": gulabJamun,
-  "rasmalai": rasmalai,
-  "jalebi": jalebi,
+  "basundi": basundi,
+  "kaddukheer": kaddukheer,
+  "double-kameta": doubleKameta,
 };
 
 export const getDessertImage = (key: string): string => {

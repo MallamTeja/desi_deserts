@@ -39,7 +39,7 @@ const Index = () => {
             Our Desserts
           </h1>
           <p className="text-muted-foreground text-sm md:text-base">
-            Handcrafted with love. Limited batches daily.
+            made with love. Limited batches daily.
           </p>
         </div>
 

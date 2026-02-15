@@ -8,7 +8,7 @@ const Header = () => (
       </Link>
       <nav className="flex items-center gap-4">
         <Link to="/admin" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-          Admin
+          Home
         </Link>
       </nav>
     </div>
