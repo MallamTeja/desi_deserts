@@ -159,6 +159,6 @@ CREATE TRIGGER trigger_reduce_stock
 
 -- Seed desserts
 INSERT INTO public.desserts (name, description, price, image_url, stock) VALUES
-('Gulab Jamun', 'Soft, golden milk dumplings soaked in rose-cardamom syrup. Melt-in-your-mouth perfection.', 149, '/placeholder.svg', 200),
-('Rasmalai', 'Delicate cottage cheese patties in saffron-infused creamy milk. A royal indulgence.', 199, '/placeholder.svg', 200),
-('Jalebi', 'Crispy, spiral-shaped fritters drenched in warm sugar syrup. Irresistibly sweet & crunchy.', 99, '/placeholder.svg', 200);
+('Basundi', 'Soft, golden milk dumplings soaked in rose-cardamom syrup. Melt-in-your-mouth perfection.', 149, '/placeholder.svg', 200),
+('Kaddukheer', 'Delicate cottage cheese patties in saffron-infused creamy milk. A royal indulgence.', 199, '/placeholder.svg', 200),
+('Double Kameta', 'Crispy, spiral-shaped fritters drenched in warm sugar syrup. Irresistibly sweet & crunchy.', 99, '/placeholder.svg', 200);
