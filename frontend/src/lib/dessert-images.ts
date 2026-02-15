@@ -1,6 +1,6 @@
-import basundi from "@/assets/gulab-jamun.jpg";
-import kaddukheer from "@/assets/rasmalai.jpg";
-import doubleKameta from "@/assets/jalebi.jpg";
+import basundi from "@/assets/jalebi.jpeg";
+import kaddukheer from "@/assets/jalebi.jpeg";
+import doubleKameta from "@/assets/jalebi.jpeg";
 
 export const dessertImages: Record<string, string> = {
   "basundi": basundi,

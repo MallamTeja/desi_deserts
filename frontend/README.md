@@ -1,3 +1,20 @@
+# Dessert Darbar Frontend
+
+React + Vite + TypeScript frontend application.
+
+## Quick Start
+
+**Start the development server:**
+```bash
+npm start
+```
+
+App runs at: `http://localhost:8080`
+
+**Prerequisite**: Run `npm install` first to install dependencies.
+
+---
+
 # Welcome to your Lovable project
 
 ## Project info
