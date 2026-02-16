@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
+// import { supabase } from "@/integrations/supabase/client";
 import { getDessertImage } from "@/lib/dessert-images";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -17,17 +17,14 @@ const DessertDetails = () => {
     useEffect(() => {
         const fetchDessert = async () => {
             if (!id) return;
-            const { data, error } = await supabase
-                .from("desserts")
-                .select("*")
-                .eq("id", id)
-                .single();
-
-            if (error) {
+            try {
+                const response = await fetch(`/api/desserts/${id}`);
+                if (!response.ok) throw new Error("Dessert not found");
+                const data = await response.json();
+                setDessert(data);
+            } catch (error) {
                 console.error("Error fetching dessert", error);
                 navigate("/404");
-            } else {
-                setDessert(data);
             }
             setLoading(false);
         };

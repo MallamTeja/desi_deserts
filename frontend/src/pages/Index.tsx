@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
+// import { supabase } from "@/integrations/supabase/client";
 import IntroAnimation from "@/components/IntroAnimation";
 import DessertCard from "@/components/DessertCard";
 import Header from "@/components/Header";
@@ -16,8 +16,13 @@ const Index = () => {
 
   useEffect(() => {
     const fetchDesserts = async () => {
-      const { data } = await supabase.from("desserts").select("*");
-      if (data) setDesserts(data);
+      try {
+        const response = await fetch("/api/desserts");
+        const data = await response.json();
+        if (data) setDesserts(data);
+      } catch (error) {
+        console.error("Error fetching desserts:", error);
+      }
       setLoading(false);
     };
     fetchDesserts();
