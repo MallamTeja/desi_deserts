@@ -3,6 +3,17 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
+const dns = require('node:dns');
+
+// Fix for Node.js DNS resolution issues on some Windows environments
+if (dns.setDefaultResultOrder) {
+  dns.setDefaultResultOrder('ipv4first');
+}
+try {
+  dns.setServers(['8.8.8.8', '1.1.1.1']);
+} catch (e) {
+  console.warn('Could not set custom DNS servers:', e.message);
+}
 
 const Dessert = require('./models/Dessert');
 const Order = require('./models/Order');
@@ -11,9 +22,18 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Connect to MongoDB
-mongoose.connect(process.env.mongodbfromenv)
+mongoose.connect(process.env.mongodbfromenv, {
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000,
+})
   .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.error('MongoDB connection error:', err));
+  .catch(err => {
+    console.error('MongoDB connection error:', err);
+    // Log more detail for debugging
+    if (err.message.includes('DNS')) {
+      console.error('DNS resolution failed for cluster host.');
+    }
+  });
 
 // Middleware
 app.use(cors());

@@ -50,6 +50,13 @@ const DessertDetails = () => {
         navigate("/buy", { state: { dessert } });
     };
 
+    const handleAddToCart = () => {
+        addToCart({
+            ...dessert,
+            id: dessert._id || dessert.id
+        });
+    };
+
     return (
         <div className="min-h-screen bg-background flex flex-col">
             <Header />

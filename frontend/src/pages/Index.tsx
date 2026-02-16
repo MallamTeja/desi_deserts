@@ -19,7 +19,12 @@ const Index = () => {
       try {
         const response = await fetch("/api/desserts");
         const data = await response.json();
-        if (data) setDesserts(data);
+        if (Array.isArray(data)) {
+          setDesserts(data);
+        } else {
+          console.error("Data is not an array:", data);
+          setDesserts([]);
+        }
       } catch (error) {
         console.error("Error fetching desserts:", error);
       }
@@ -29,7 +34,7 @@ const Index = () => {
   }, []);
 
   const handleOrder = (dessert: any) => {
-    navigate(`/desserts/${dessert.id}`);
+    navigate(`/desserts/${dessert._id || dessert.id}`);
   };
 
   if (showIntro) {
@@ -65,7 +70,7 @@ const Index = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {desserts.map((dessert) => (
-              <DessertCard key={dessert.id} dessert={dessert} onOrder={handleOrder} />
+              <DessertCard key={dessert._id || dessert.id} dessert={dessert} onOrder={handleOrder} />
             ))}
           </div>
         )}

@@ -1,5 +1,17 @@
 require('dotenv').config({ path: '../.env' });
 const mongoose = require('mongoose');
+const dns = require('node:dns');
+
+// Fix for Node.js DNS resolution issues on some Windows environments
+if (dns.setDefaultResultOrder) {
+    dns.setDefaultResultOrder('ipv4first');
+}
+try {
+    dns.setServers(['8.8.8.8', '1.1.1.1']);
+} catch (e) {
+    console.warn('Could not set custom DNS servers:', e.message);
+}
+
 const Dessert = require('./models/Dessert');
 
 const desserts = [
@@ -34,8 +46,9 @@ mongoose.connect(process.env.mongodbfromenv)
         console.log('Inserted sample desserts');
 
         mongoose.connection.close();
+        console.log('Done.');
     })
     .catch(err => {
-        console.error('Error connecting to MongoDB:', err);
+        console.error('Error:', err);
         process.exit(1);
     });
