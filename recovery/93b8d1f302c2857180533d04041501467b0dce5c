@@ -1,0 +1,23 @@
+const bcrypt = require('bcryptjs');
+const AdminUser = require('./models/AdminUser');
+
+async function seedAdmin() {
+    try {
+        const existing = await AdminUser.findOne({ name: 'karthik' });
+        if (existing) {
+            console.log('Admin user already exists, skipping seed.');
+            return;
+        }
+
+        const hashedPassword = await bcrypt.hash('biraynifordev', 10);
+        await AdminUser.create({
+            name: 'karthik',
+            password: hashedPassword,
+        });
+        console.log('Admin user "karthik" seeded successfully.');
+    } catch (err) {
+        console.error('Error seeding admin user:', err.message);
+    }
+}
+
+module.exports = seedAdmin;

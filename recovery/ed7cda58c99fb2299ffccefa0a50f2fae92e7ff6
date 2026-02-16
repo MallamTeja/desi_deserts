@@ -14,7 +14,6 @@ interface DessertCardProps {
 }
 
 const DessertCard = ({ dessert, onOrder }: DessertCardProps) => {
-
   return (
     <div className="card-dessert">
       <div className="aspect-square overflow-hidden">
@@ -41,7 +40,7 @@ const DessertCard = ({ dessert, onOrder }: DessertCardProps) => {
           onClick={() => onOrder(dessert)}
           className="btn-order w-full"
         >
-          Order Now
+          View Item
         </button>
       </div>
     </div>
