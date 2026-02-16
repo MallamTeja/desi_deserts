@@ -24,7 +24,7 @@ const Index = () => {
   }, []);
 
   const handleOrder = (dessert: any) => {
-    navigate(`/desserts/${dessert.id}`);
+    navigate("/pay", { state: { dessert } });
   };
 
   if (showIntro) {
@@ -32,9 +32,9 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       <Header />
-      <main className="container max-w-5xl mx-auto px-4 py-8">
+      <main className="container max-w-5xl mx-auto px-4 py-8 flex-1">
         <div className="text-center mb-10 space-y-2">
           <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground">
             Our Desserts
@@ -64,7 +64,6 @@ const Index = () => {
             ))}
           </div>
         )}
-
       </main>
       <Footer />
     </div>

@@ -14,7 +14,7 @@ const Admin = () => {
 
   const [orders, setOrders] = useState<any[]>([]);
   const [desserts, setDesserts] = useState<any[]>([]);
-  const [tab, setTab] = useState<"orders" | "stock">("orders");
+  const [tab, setTab] = useState<"orders">("orders");
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -88,15 +88,7 @@ const Admin = () => {
     }
   };
 
-  const updateStock = async (id: string, stock: number) => {
-    const { error } = await supabase.from("desserts").update({ stock }).eq("id", id);
-    if (error) {
-      toast({ title: "Update failed", variant: "destructive" });
-    } else {
-      toast({ title: "Stock updated!" });
-      fetchData();
-    }
-  };
+
 
   if (loading) {
     return (
@@ -168,19 +160,10 @@ const Admin = () => {
         <div className="flex gap-1 bg-secondary rounded-lg p-1">
           <button
             onClick={() => setTab("orders")}
-            className={`flex-1 py-2 text-sm font-medium rounded-md transition-colors ${
-              tab === "orders" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground"
-            }`}
+            className={`flex-1 py-2 text-sm font-medium rounded-md transition-colors ${tab === "orders" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground"
+              }`}
           >
             Orders ({orders.length})
-          </button>
-          <button
-            onClick={() => setTab("stock")}
-            className={`flex-1 py-2 text-sm font-medium rounded-md transition-colors ${
-              tab === "stock" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground"
-            }`}
-          >
-            Stock
           </button>
         </div>
 
@@ -233,45 +216,7 @@ const Admin = () => {
           </div>
         )}
 
-        {tab === "stock" && (
-          <div className="space-y-3">
-            {desserts.map((d) => (
-              <div key={d.id} className="bg-card border border-border rounded-xl p-4 flex items-center gap-4">
-                <div className="flex-1">
-                  <p className="font-display font-semibold text-foreground">{d.name}</p>
-                  <p className="text-sm text-muted-foreground">₹{d.price}</p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="number"
-                    min={0}
-                    max={999}
-                    value={d.stock}
-                    onChange={(e) => {
-                      const val = parseInt(e.target.value) || 0;
-                      setDesserts((prev) =>
-                        prev.map((item) => (item.id === d.id ? { ...item, stock: val } : item))
-                      );
-                    }}
-                    className="w-20 px-3 py-1.5 rounded-md border border-input bg-background text-sm text-center"
-                  />
-                  <button
-                    onClick={() => updateStock(d.id, d.stock)}
-                    className="btn-order text-sm py-1.5 px-4"
-                  >
-                    Save
-                  </button>
-                  <button
-                    onClick={() => updateStock(d.id, 0)}
-                    className="text-xs text-destructive font-medium hover:underline"
-                  >
-                    Sold Out
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+
       </div>
     </div>
   );

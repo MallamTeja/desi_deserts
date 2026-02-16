@@ -9,17 +9,10 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Serve static files from frontend dist folder
-app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
 // API routes
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Server is running!' });
-});
-
-// Serve frontend for all other routes (SPA support)
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
 });
 
 // Error handling

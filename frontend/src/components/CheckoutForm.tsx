@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { toast } from "@/hooks/use-toast";
 
-const UPI_ID = "yourupi@bank";
+const UPI_ID = "yourupi@bank"; // This should ideally be an env var or prop
 
 interface CheckoutData {
     name: string;
@@ -11,12 +11,13 @@ interface CheckoutData {
 
 interface CheckoutFormProps {
     totalAmount: number;
-    submitting: boolean;
+    loading?: boolean;
+    submitting?: boolean; // keeping for backward compatibility if needed, but 'loading' is better
     onSubmit: (data: CheckoutData) => void;
     buttonLabel?: string;
 }
 
-const CheckoutForm = ({ totalAmount, submitting, onSubmit, buttonLabel = "Place Order" }: CheckoutFormProps) => {
+const CheckoutForm = ({ totalAmount, loading, submitting, onSubmit, buttonLabel = "Place Order" }: CheckoutFormProps) => {
     const [name, setName] = useState("");
     const [phone, setPhone] = useState("");
     const [transactionId, setTransactionId] = useState("");
@@ -39,12 +40,15 @@ const CheckoutForm = ({ totalAmount, submitting, onSubmit, buttonLabel = "Place 
         onSubmit({ name: name.trim(), phone: phone.trim(), transactionId: transactionId.trim() });
     };
 
+    const isLoading = loading || submitting;
+
     return (
-        <div className="space-y-5">
-            {/* UPI Payment */}
+        <div className="space-y-6">
+            {/* UPI Payment Section */}
             <div className="bg-card border border-border rounded-xl p-6 space-y-4 text-center">
                 <h2 className="font-display text-lg font-semibold text-foreground">Pay via UPI</h2>
 
+                {/* QR placeholder */}
                 <div className="w-48 h-48 mx-auto bg-muted rounded-lg flex items-center justify-center border-2 border-dashed border-border">
                     <span className="text-xs text-muted-foreground">UPI QR Code</span>
                 </div>
@@ -53,7 +57,11 @@ const CheckoutForm = ({ totalAmount, submitting, onSubmit, buttonLabel = "Place 
                     <code className="bg-secondary px-3 py-1.5 rounded text-sm font-mono text-foreground">
                         {UPI_ID}
                     </code>
-                    <button onClick={handleCopyUPI} className="text-xs text-primary font-medium hover:underline">
+                    <button
+                        onClick={handleCopyUPI}
+                        className="text-xs text-primary font-medium hover:underline"
+                        type="button"
+                    >
                         Copy
                     </button>
                 </div>
@@ -66,7 +74,7 @@ const CheckoutForm = ({ totalAmount, submitting, onSubmit, buttonLabel = "Place 
                 </div>
             </div>
 
-            {/* Form */}
+            {/* Form Section */}
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                     <label className="block text-sm font-medium text-foreground mb-1">Your Name</label>
@@ -77,6 +85,7 @@ const CheckoutForm = ({ totalAmount, submitting, onSubmit, buttonLabel = "Place 
                         placeholder="Enter your name"
                         maxLength={100}
                         className="w-full px-4 py-2.5 rounded-lg border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                        required
                     />
                 </div>
                 <div>
@@ -88,6 +97,7 @@ const CheckoutForm = ({ totalAmount, submitting, onSubmit, buttonLabel = "Place 
                         placeholder="10-digit phone number"
                         maxLength={10}
                         className="w-full px-4 py-2.5 rounded-lg border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                        required
                     />
                 </div>
                 <div>
@@ -101,8 +111,8 @@ const CheckoutForm = ({ totalAmount, submitting, onSubmit, buttonLabel = "Place 
                         className="w-full px-4 py-2.5 rounded-lg border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                     />
                 </div>
-                <button type="submit" disabled={submitting} className="btn-order w-full">
-                    {submitting ? "Submitting..." : buttonLabel}
+                <button type="submit" disabled={isLoading} className="btn-order w-full">
+                    {isLoading ? "Processing..." : buttonLabel}
                 </button>
             </form>
         </div>

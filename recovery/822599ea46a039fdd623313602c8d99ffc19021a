@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Desi Desserts - Authentic Indian desserts, freshly crafted in limited batches." />
+    <title>Desi Desserts | Authentic Flavors. Freshly Crafted.</title>
+    <meta property="og:title" content="Desi Desserts" />
+    <meta property="og:description" content="Authentic Indian desserts, freshly crafted in limited batches." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

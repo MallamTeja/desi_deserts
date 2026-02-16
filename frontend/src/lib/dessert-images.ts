@@ -1,19 +1,17 @@
-<<<<<<< HEAD
-import basundi from "@/assets/gulab-jamun.jpg";
-import khaddukakheer from "@/assets/rasmalai.jpg";
-import doubleKameta from "@/assets/jalebi.jpg";
-=======
-import basundi from "@/assets/jalebi.jpeg";
-import kaddukheer from "@/assets/jalebi.jpeg";
-import doubleKameta from "@/assets/jalebi.jpeg";
->>>>>>> 0cdc526d8fa8a04edf828c071ea906bde70d97e8
+import basundiImg from "@/assets/basundi.png";
+import kadduImg from "@/assets/kaddukhakheer.png";
+import doubleImg from "@/assets/doublekameeta.png";
 
 export const dessertImages: Record<string, string> = {
-  "basundi": basundi,
-  "khaddukakheer": khaddukakheer,
-  "double-kameta": doubleKameeta,
+  "basundi": basundiImg,
+  "khaddukakheer": kadduImg,
+  "double-kameta": doubleImg,
+  // Normalize keys to standard names used in other parts of the app
+  "kaddu-ki-kheer": kadduImg,
+  "double-ka-meetha": doubleImg,
 };
 
 export const getDessertImage = (key: string): string => {
-  return dessertImages[key] || "/placeholder.svg";
+  if (!key) return "/placeholder.svg";
+  return dessertImages[key] || dessertImages[key.toLowerCase().replace(/\s+/g, '-')] || "/placeholder.svg";
 };

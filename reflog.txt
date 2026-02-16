@@ -1,0 +1,20 @@
+a5c98d2 HEAD@{0}: reset: moving to HEAD
+a5c98d2 HEAD@{1}: commit: deploment scripts
+774910b HEAD@{2}: pull: Fast-forward
+0cdc526 HEAD@{3}: checkout: moving from teja to main
+0688938 HEAD@{4}: commit (merge): Resolved .gitignore merge conflict
+67d0198 HEAD@{5}: commit (merge): pull from main
+12385f4 HEAD@{6}: checkout: moving from main to teja
+0cdc526 HEAD@{7}: checkout: moving from teja to main
+12385f4 HEAD@{8}: checkout: moving from teja to teja
+12385f4 HEAD@{9}: commit: ignore updated
+6451e69 HEAD@{10}: checkout: moving from main to teja
+0cdc526 HEAD@{11}: pull origin main --rebase (finish): returning to refs/heads/main
+0cdc526 HEAD@{12}: pull origin main --rebase (pick): feat: setup backend server with Express and full documentation
+6341d47 HEAD@{13}: pull origin main --rebase (start): checkout 6341d47c38796f5dc1098a940d7934ae8084148f
+c8389d3 HEAD@{14}: commit: feat: setup backend server with Express and full documentation
+a9a8611 HEAD@{15}: pull origin main --ff-only: Fast-forward
+63b3f37 HEAD@{16}: checkout: moving from teja to main
+6451e69 HEAD@{17}: merge origin/main: Merge made by the 'ort' strategy.
+2253c95 HEAD@{18}: commit: frontend server is now running
+63b3f37 HEAD@{19}: checkout: moving from teja to teja
