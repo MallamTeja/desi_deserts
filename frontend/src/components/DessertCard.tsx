@@ -39,9 +39,9 @@ const DessertCard = ({ dessert, onOrder }: DessertCardProps) => {
         </p>
         <button
           onClick={() => onOrder(dessert)}
-          className="btn-order w-full"
+          className="btn-order w-full bg-secondary text-secondary-foreground hover:bg-secondary/90"
         >
-          Order Now
+          View Dessert
         </button>
       </div>
     </div>

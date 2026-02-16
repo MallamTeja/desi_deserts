@@ -24,7 +24,7 @@ const Index = () => {
   }, []);
 
   const handleOrder = (dessert: any) => {
-    navigate("/pay", { state: { dessert } });
+    navigate(`/desserts/${dessert.id}`);
   };
 
   if (showIntro) {
