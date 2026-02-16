@@ -28,7 +28,7 @@ const DessertCard = ({ dessert, onOrder }: DessertCardProps) => {
           loading="lazy"
         />
       </div>
-      <div className="p-5 space-y-3">
+      <div className="p-4 md:p-5 space-y-3">
         <div className="flex items-start justify-between gap-2">
           <h3 className="font-display text-xl font-semibold text-foreground">
             {dessert.name}
