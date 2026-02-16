@@ -1,13 +1,10 @@
 import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import Header from "@/components/Header";
-import type { Session } from "@supabase/supabase-js";
 
 const Admin = () => {
-  const [session, setSession] = useState<Session | null>(null);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [authLoading, setAuthLoading] = useState(false);
@@ -17,91 +14,75 @@ const Admin = () => {
   const [tab, setTab] = useState<"orders">("orders");
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      if (session) {
-        checkAdmin(session.user.id);
-      } else {
-        setIsAdmin(false);
-        setLoading(false);
-      }
-    });
-
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      if (session) {
-        checkAdmin(session.user.id);
-      } else {
-        setLoading(false);
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  const checkAdmin = async (userId: string) => {
-    const { data } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", userId)
-      .eq("role", "admin")
-      .maybeSingle();
-    setIsAdmin(!!data);
-    setLoading(false);
-    if (data) {
+    // Check if already logged in from session
+    const stored = sessionStorage.getItem("admin_logged_in");
+    if (stored === "true") {
+      setIsLoggedIn(true);
       fetchData();
     }
-  };
+  }, []);
 
   const fetchData = async () => {
-    const [ordersRes, dessertsRes] = await Promise.all([
-      supabase.from("orders").select("*").order("created_at", { ascending: false }),
-      supabase.from("desserts").select("*"),
-    ]);
-    if (ordersRes.data) setOrders(ordersRes.data);
-    if (dessertsRes.data) setDesserts(dessertsRes.data);
+    try {
+      const [ordersRes, dessertsRes] = await Promise.all([
+        fetch("/api/orders"),
+        fetch("/api/desserts"),
+      ]);
+      const ordersData = await ordersRes.json();
+      const dessertsData = await dessertsRes.json();
+      if (Array.isArray(ordersData)) setOrders(ordersData);
+      if (Array.isArray(dessertsData)) setDesserts(dessertsData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setAuthLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    setAuthLoading(false);
-    if (error) {
+    try {
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Login failed");
+      }
+
+      setIsLoggedIn(true);
+      sessionStorage.setItem("admin_logged_in", "true");
+      fetchData();
+    } catch (error: any) {
       toast({ title: "Login failed", description: error.message, variant: "destructive" });
+    } finally {
+      setAuthLoading(false);
     }
   };
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    setSession(null);
-    setIsAdmin(false);
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    sessionStorage.removeItem("admin_logged_in");
   };
 
   const updateOrder = async (id: string, field: string, value: string) => {
-    const { error } = await supabase.from("orders").update({ [field]: value }).eq("id", id);
-    if (error) {
-      toast({ title: "Update failed", variant: "destructive" });
-    } else {
+    try {
+      const response = await fetch(`/api/orders/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ [field]: value }),
+      });
+      if (!response.ok) throw new Error("Update failed");
       toast({ title: "Updated!" });
       fetchData();
+    } catch (error) {
+      toast({ title: "Update failed", variant: "destructive" });
     }
   };
 
-
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-background">
-        <Header />
-        <div className="flex items-center justify-center py-20">
-          <p className="text-muted-foreground">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!session) {
+  if (!isLoggedIn) {
     return (
       <div className="min-h-screen bg-background">
         <Header />
@@ -126,20 +107,6 @@ const Admin = () => {
               {authLoading ? "Signing in..." : "Sign In"}
             </button>
           </form>
-        </div>
-      </div>
-    );
-  }
-
-  if (!isAdmin) {
-    return (
-      <div className="min-h-screen bg-background">
-        <Header />
-        <div className="container max-w-md mx-auto px-4 py-20 text-center">
-          <p className="text-muted-foreground">You don't have admin access.</p>
-          <button onClick={handleLogout} className="btn-order mt-4">
-            Sign Out
-          </button>
         </div>
       </div>
     );
@@ -171,7 +138,7 @@ const Admin = () => {
           <div className="space-y-3">
             {orders.length === 0 && <p className="text-muted-foreground text-center py-10">No orders yet.</p>}
             {orders.map((order) => (
-              <div key={order.id} className="bg-card border border-border rounded-xl p-4 space-y-3">
+              <div key={order._id} className="bg-card border border-border rounded-xl p-4 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="font-display font-bold text-primary text-lg">#{order.order_id}</span>
                   <span className="text-xs text-muted-foreground">
@@ -190,7 +157,7 @@ const Admin = () => {
                     <label className="text-xs text-muted-foreground">Payment</label>
                     <select
                       value={order.transaction_status}
-                      onChange={(e) => updateOrder(order.id, "transaction_status", e.target.value)}
+                      onChange={(e) => updateOrder(order._id, "transaction_status", e.target.value)}
                       className="w-full mt-1 px-3 py-1.5 rounded-md border border-input bg-background text-sm"
                     >
                       <option value="pending">Pending</option>
@@ -202,7 +169,7 @@ const Admin = () => {
                     <label className="text-xs text-muted-foreground">Serving</label>
                     <select
                       value={order.serving_status}
-                      onChange={(e) => updateOrder(order.id, "serving_status", e.target.value)}
+                      onChange={(e) => updateOrder(order._id, "serving_status", e.target.value)}
                       className="w-full mt-1 px-3 py-1.5 rounded-md border border-input bg-background text-sm"
                     >
                       <option value="pending">Pending</option>

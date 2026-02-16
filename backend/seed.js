@@ -4,40 +4,22 @@ const Dessert = require('./models/Dessert');
 
 const desserts = [
     {
-        name: "Gulab Jamun",
-        description: "Soft, spongy milk-solid balls soaked in rose-scented sugar syrup.",
-        price: 60,
-        image_url: "gulab_jamun.jpg"
+        name: "Basundi",
+        description: "Rich, creamy, sweetened milk simmered to perfection with nuts and saffron.",
+        price: 39,
+        image_url: "basundi"
     },
     {
-        name: "Rasgulla",
-        description: "Ball-shaped dumplings of chhena and semolina dough, cooked in light syrup made of sugar.",
-        price: 50,
-        image_url: "rasgulla.jpg"
+        name: "Double ka Meetha",
+        description: "A Hyderabadi classic made with fried bread slices soaked in saffron milk and cardamom syrup.",
+        price: 59,
+        image_url: "double-ka-meetha"
     },
     {
-        name: "Jalebi",
-        description: "Crispy, orange, coil-shaped sweets made by deep-frying maida flour batter in pretzel or circular shapes, which are then soaked in sugar syrup.",
-        price: 40,
-        image_url: "jalebi.jpg"
-    },
-    {
-        name: "Rasmalai",
-        description: "Soft chhena balls soaked in thickened, sweetened milk flavored with cardamom and saffron.",
-        price: 80,
-        image_url: "rasmalai.jpg"
-    },
-    {
-        name: "Kaju Katli",
-        description: "Rich diamond-shaped sweet made with cashew nuts and sugar, garnished with edible silver foil.",
-        price: 120,
-        image_url: "kaju_katli.jpg"
-    },
-    {
-        name: "Gajar Ka Halwa",
-        description: "Classic Indian dessert made with grated carrots, whole milk, dried fruit, and nuts.",
-        price: 90,
-        image_url: "gajar_halwa.jpg"
+        name: "Kaddu ka Kheer",
+        description: "A delightful pudding made with grated pumpkin, milk, and aromatic spices.",
+        price: 69,
+        image_url: "kaddu-ki-kheer"
     }
 ];
 

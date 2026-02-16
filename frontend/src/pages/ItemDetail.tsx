@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import { getDessertImage } from "@/lib/dessert-images";
 import { useCart } from "@/components/CartContext";
 import Header from "@/components/Header";
@@ -11,7 +10,6 @@ const INGREDIENTS: Record<string, string[]> = {
     basundi: ["Full-fat Milk", "Sugar", "Cardamom", "Saffron", "Pistachios", "Almonds"],
     "kaddu-ki-kheer": ["Pumpkin (Kaddu)", "Milk", "Sugar", "Cardamom", "Ghee", "Dry Fruits"],
     "double-ka-meetha": ["Bread Slices", "Milk", "Sugar", "Cardamom", "Ghee", "Saffron", "Almonds", "Raisins"],
-    // fallback keys
     khaddukakheer: ["Pumpkin (Kaddu)", "Milk", "Sugar", "Cardamom", "Ghee", "Dry Fruits"],
     "double-kameta": ["Bread Slices", "Milk", "Sugar", "Cardamom", "Ghee", "Saffron", "Almonds", "Raisins"],
 };
@@ -26,8 +24,14 @@ const ItemDetail = () => {
     useEffect(() => {
         const fetchDessert = async () => {
             if (!id) return;
-            const { data } = await supabase.from("desserts").select("*").eq("id", id).single();
-            if (data) setDessert(data);
+            try {
+                const response = await fetch(`/api/desserts/${id}`);
+                if (!response.ok) throw new Error("Dessert not found");
+                const data = await response.json();
+                if (data) setDessert(data);
+            } catch (error) {
+                console.error("Error fetching dessert:", error);
+            }
             setLoading(false);
         };
         fetchDessert();
@@ -64,7 +68,7 @@ const ItemDetail = () => {
 
     const handleAddToCart = () => {
         addToCart({
-            id: dessert.id,
+            id: dessert._id || dessert.id,
             name: dessert.name,
             description: dessert.description,
             price: dessert.price,
