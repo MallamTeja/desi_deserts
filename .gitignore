@@ -1,34 +1,19 @@
-<<<<<<< HEAD
-# Environment files
-.env
-.env.local
-.env.*.local
-
-# Dependencies
-node_modules/
-backend/node_modules/
-frontend/node_modules/
-=======
-# Dependencies
-node_modules/
-*/node_modules/
->>>>>>> aceeade0afc91651fab62d5b853729a5dc529c3c
-
-# Build outputs
-dist/
-dist-ssr/
-build/
-<<<<<<< HEAD
-*.local
-=======
-
 # Environment files
 .env
 .env.local
 .env.*.local
 frontend/.env
 backend/.env
->>>>>>> aceeade0afc91651fab62d5b853729a5dc529c3c
+
+# Dependencies
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+
+# Build outputs
+dist/
+dist-ssr/
+build/
 
 # Logs
 logs/
@@ -50,7 +35,6 @@ lerna-debug.log*
 *.sln
 *.sw?
 
-<<<<<<< HEAD
 # Testing
 coverage/
 
@@ -58,17 +42,19 @@ coverage/
 *.pem
 .cache/
 .parcel-cache/
+*.local
 
 # OS files
 Thumbs.db
-=======
-# Operating System files
-Thumbs.db
-*.pem
 
 # Database
 *.sqlite
 *.sqlite3
+*.db
+
+# File uploads (if applicable)
+uploads/
+public/uploads/
 
 # Temporary files
 *.tmp
@@ -76,12 +62,7 @@ Thumbs.db
 temp/
 tmp/
 
-# Excel backups (if generated)
+# Excel backups and lock files
 *.xlsx.backup
 *~$*.xlsx
-
-# Misc
-.cache/
-.parcel-cache/
-*.local
->>>>>>> aceeade0afc91651fab62d5b853729a5dc529c3c
+*.xlsx.lock
