@@ -1,16 +1,24 @@
+# Environment files
+.env
+.env.local
+.env.*.local
+
 # Dependencies
 node_modules/
+backend/node_modules/
+frontend/node_modules/
+# Dependencies
+
 */node_modules/
 
 # Build outputs
 dist/
 dist-ssr/
 build/
+*.local
 
 # Environment files
-.env
-.env.local
-.env.*.local
+
 frontend/.env
 backend/.env
 
@@ -34,6 +42,16 @@ lerna-debug.log*
 *.sln
 *.sw?
 
+# Testing
+coverage/
+
+# Misc
+*.pem
+.cache/
+.parcel-cache/
+
+# OS files
+Thumbs.db
 # Operating System files
 Thumbs.db
 *.pem
