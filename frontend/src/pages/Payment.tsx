@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import { toast } from "@/hooks/use-toast";
 
@@ -48,29 +47,34 @@ const Payment = () => {
     }
 
     setSubmitting(true);
-    const { data, error } = await supabase
-      .from("orders")
-      .insert({
-        order_id: "",
-        name: name.trim(),
-        phone: phone.trim(),
-        dessert_id: dessert.id,
-        dessert_name: dessert.name,
-        quantity: 1,
-        total_amount: dessert.price,
-        transaction_id: transactionId.trim(),
-      })
-      .select("order_id")
-      .single();
 
-    setSubmitting(false);
+    try {
+      const response = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name.trim(),
+          phone: phone.trim(),
+          dessert_id: dessert.id || dessert._id,
+          dessert_name: dessert.name,
+          quantity: 1,
+          total_amount: dessert.price,
+          transaction_id: transactionId.trim(),
+        }),
+      });
 
-    if (error) {
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Order failed");
+      }
+
+      setOrderId(data.order_id);
+    } catch (error: any) {
       toast({ title: "Order failed", description: error.message, variant: "destructive" });
-      return;
+    } finally {
+      setSubmitting(false);
     }
-
-    setOrderId(data.order_id);
   };
 
   if (orderId) {
@@ -117,7 +121,7 @@ const Payment = () => {
         {/* UPI Payment */}
         <div className="bg-card border border-border rounded-xl p-6 space-y-4 text-center">
           <h2 className="font-display text-lg font-semibold text-foreground">Pay via UPI</h2>
-          
+
           {/* QR placeholder */}
           <div className="w-48 h-48 mx-auto bg-muted rounded-lg flex items-center justify-center border-2 border-dashed border-border">
             <span className="text-xs text-muted-foreground">UPI QR Code</span>

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import CheckoutForm from "@/components/CheckoutForm";
 import { toast } from "@/hooks/use-toast";
@@ -33,29 +32,33 @@ const Buy = () => {
     const handleCheckout = async (details: { name: string; phone: string; transactionId: string }) => {
         setLoading(true);
 
-        const { data, error } = await supabase
-            .from("orders")
-            .insert({
-                order_id: "",
-                name: details.name,
-                phone: details.phone,
-                dessert_id: dessert.id,
-                dessert_name: dessert.name,
-                quantity: 1, // Direct buy is usually 1
-                total_amount: dessert.price,
-                transaction_id: details.transactionId,
-            })
-            .select("order_id")
-            .single();
+        try {
+            const response = await fetch("/api/orders", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    name: details.name,
+                    phone: details.phone,
+                    dessert_id: dessert.id || dessert._id,
+                    dessert_name: dessert.name,
+                    quantity: 1,
+                    total_amount: dessert.price,
+                    transaction_id: details.transactionId,
+                }),
+            });
 
-        setLoading(false);
+            const data = await response.json();
 
-        if (error) {
+            if (!response.ok) {
+                throw new Error(data.error || "Order failed");
+            }
+
+            setOrderId(data.order_id);
+        } catch (error: any) {
             toast({ title: "Order failed", description: error.message, variant: "destructive" });
-            return;
+        } finally {
+            setLoading(false);
         }
-
-        setOrderId(data.order_id);
     };
 
     if (orderId) {
