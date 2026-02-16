@@ -9,11 +9,7 @@ const dns = require('node:dns');
 if (dns.setDefaultResultOrder) {
   dns.setDefaultResultOrder('ipv4first');
 }
-try {
-  dns.setServers(['8.8.8.8', '1.1.1.1']);
-} catch (e) {
-  console.warn('Could not set custom DNS servers:', e.message);
-}
+// Removed manual dns.setServers as it may cause ECONNREFUSED if external DNS is blocked
 
 const Dessert = require('./models/Dessert');
 const Order = require('./models/Order');

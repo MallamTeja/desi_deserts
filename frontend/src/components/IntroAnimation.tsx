@@ -8,29 +8,26 @@ const IntroAnimation = ({ onComplete }: IntroAnimationProps) => {
   const [phase, setPhase] = useState<"logo" | "text" | "fadeout">("logo");
 
   useEffect(() => {
-    const t1 = setTimeout(() => setPhase("text"), 600);
-    const t2 = setTimeout(() => setPhase("fadeout"), 1600);
-    const t3 = setTimeout(onComplete, 2000);
+    const t1 = setTimeout(() => setPhase("text"), 900);
+    const t2 = setTimeout(() => setPhase("fadeout"), 2000);
+    const t3 = setTimeout(onComplete, 2400);
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
   }, [onComplete]);
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-background transition-opacity duration-400 ${
-        phase === "fadeout" ? "opacity-0" : "opacity-100"
-      }`}
+      className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-background transition-opacity duration-400 ${phase === "fadeout" ? "opacity-0" : "opacity-100"
+        }`}
     >
       <div
-        className={`text-5xl md:text-7xl font-display font-bold text-primary transition-all duration-700 ${
-          phase === "logo" ? "opacity-0 scale-90" : "opacity-100 scale-100"
-        }`}
+        className={`text-5xl md:text-7xl font-display font-bold text-primary transition-all duration-700 ${phase === "logo" ? "opacity-0 scale-90" : "opacity-100 scale-100"
+          }`}
       >
         Desi Desserts
       </div>
       <p
-        className={`mt-4 text-sm md:text-base tracking-widest uppercase text-muted-foreground transition-all duration-700 delay-200 ${
-          phase === "text" ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
-        }`}
+        className={`mt-4 text-sm md:text-base tracking-widest uppercase text-muted-foreground transition-all duration-700 delay-200 ${phase === "text" ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+          }`}
       >
         Authentic Flavors · Limited Batches · Freshly Crafted
       </p>

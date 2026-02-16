@@ -97,7 +97,7 @@ const DessertDetails = () => {
 
                         <div className="pt-6 space-y-4">
                             <button
-                                onClick={() => addToCart(dessert)}
+                                onClick={handleAddToCart}
                                 className="w-full py-3 rounded-lg border-2 border-primary text-primary font-bold hover:bg-primary/10 transition-colors"
                             >
                                 Add to Cart
