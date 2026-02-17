@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { toast } from "@/hooks/use-toast";
+import { apiFetch } from "@/lib/api";
 import Header from "@/components/Header";
 
 const Admin = () => {
@@ -24,12 +25,10 @@ const Admin = () => {
 
   const fetchData = async () => {
     try {
-      const [ordersRes, dessertsRes] = await Promise.all([
-        fetch("/api/orders"),
-        fetch("/api/desserts"),
+      const [ordersData, dessertsData] = await Promise.all([
+        apiFetch("/api/orders"),
+        apiFetch("/api/desserts"),
       ]);
-      const ordersData = await ordersRes.json();
-      const dessertsData = await dessertsRes.json();
       if (Array.isArray(ordersData)) setOrders(ordersData);
       if (Array.isArray(dessertsData)) setDesserts(dessertsData);
     } catch (error) {
@@ -41,16 +40,10 @@ const Admin = () => {
     e.preventDefault();
     setAuthLoading(true);
     try {
-      const response = await fetch("/api/login", {
+      const data = await apiFetch("/api/login", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Login failed");
-      }
 
       setIsLoggedIn(true);
       sessionStorage.setItem("admin_logged_in", "true");
@@ -69,12 +62,10 @@ const Admin = () => {
 
   const updateOrder = async (id: string, field: string, value: string) => {
     try {
-      const response = await fetch(`/api/orders/${id}`, {
+      await apiFetch(`/api/orders/${id}`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ [field]: value }),
       });
-      if (!response.ok) throw new Error("Update failed");
       toast({ title: "Updated!" });
       fetchData();
     } catch (error) {

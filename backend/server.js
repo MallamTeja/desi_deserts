@@ -1,15 +1,11 @@
-require('dotenv').config({ path: '../.env' });
+const path = require('path');
+require('dotenv').config({
+  path: process.env.NODE_ENV === 'production' ? null : path.join(__dirname, '../.env')
+});
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
-const dns = require('node:dns');
-
-// Fix for Node.js DNS resolution issues on some Windows environments
-if (dns.setDefaultResultOrder) {
-  dns.setDefaultResultOrder('ipv4first');
-}
-// Removed manual dns.setServers as it may cause ECONNREFUSED if external DNS is blocked
 
 const Dessert = require('./models/Dessert');
 const Order = require('./models/Order');
@@ -18,28 +14,30 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Connect to MongoDB
-mongoose.connect(process.env.mongodbfromenv, {
+const mongoUri = process.env.mongodbfromenv || process.env.MONGODB_URI;
+mongoose.connect(mongoUri, {
   serverSelectionTimeoutMS: 5000,
   socketTimeoutMS: 45000,
 })
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => {
     console.error('MongoDB connection error:', err);
-    // Log more detail for debugging
-    if (err.message.includes('DNS')) {
-      console.error('DNS resolution failed for cluster host.');
-    }
   });
 
 // Middleware
-app.use(cors());
+const corsOptions = {
+  origin: process.env.FRONTEND_URL || '*',
+  optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
+
 app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        connectSrc: ["'self'", "http://localhost:3000", "http://localhost:8080", "ws://localhost:8080"],
-        fontSrc: ["'self'", "https://r2cdn.perplexity.ai", "https://fonts.gstatic.com"],
+        connectSrc: ["'self'", "http://localhost:3000", "https://*.vercel.app", "https://*.render.com"],
+        fontSrc: ["'self'", "https://fonts.gstatic.com"],
         styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
         scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
         imgSrc: ["'self'", "data:", "https:"],

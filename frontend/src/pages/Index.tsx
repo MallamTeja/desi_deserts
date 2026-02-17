@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 // import { supabase } from "@/integrations/supabase/client";
+import { apiFetch } from "@/lib/api";
 import IntroAnimation from "@/components/IntroAnimation";
 import DessertCard from "@/components/DessertCard";
 import Header from "@/components/Header";
@@ -17,8 +18,7 @@ const Index = () => {
   useEffect(() => {
     const fetchDesserts = async () => {
       try {
-        const response = await fetch("/api/desserts");
-        const data = await response.json();
+        const data = await apiFetch("/api/desserts");
         if (Array.isArray(data)) {
           setDesserts(data);
         } else {
